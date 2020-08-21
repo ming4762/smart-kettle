@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.smart</groupId>
+        <artifactId>smart-kettle</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>smart-kettle-core</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>smart-kettle-core</name>
+    <description>kettle核心</description>
+
+    <properties>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.pentaho</groupId>
+            <artifactId>kettle-core</artifactId>
+        </dependency>
+        <!--引入kettle支持-->
+        <dependency>
+            <groupId>org.pentaho</groupId>
+            <artifactId>kettle-engine</artifactId>
+        </dependency>
+        <!--引入kettle支持-->
+        <dependency>
+            <groupId>org.pentaho</groupId>
+            <artifactId>metastore</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-vfs2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+    </dependencies>
+
+
+</project>

@@ -10,15 +10,14 @@ import lombok.Setter
  */
 @Getter
 @Setter
-class DatabaseMetaProperties {
-    private val type = "mysql"
-    private val access = "jdbc"
-    private val name = ""
-    private val host = "localhost"
-    private val db = ""
-    private val port = "3306"
-    private val dbUser = "root"
-    private val dbPassword = ""
-    private val resUser = "admin"
-    private val resPassword = "admin"
+open class DatabaseMetaProperties {
+    val type = "mysql"
+    val access = "jdbc"
+    var name: String? = null
+    val host = "localhost"
+    val db: String? = null
+    val port = "3306"
+    val dbUser = "root"
+    val dbPassword = ""
+
 }

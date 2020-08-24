@@ -20,6 +20,8 @@
         <kotlin.version>1.4.0</kotlin.version>
 
         <kettle.version>8.3.0.0</kettle.version>
+
+        <smart-kettle.version>1.0.0-SNAPSHOT</smart-kettle.version>
     </properties>
 
     <dependencies>

@@ -1,4 +1,4 @@
-package com.smart.starter.kettle.log
+package com.smart.starter.kettle.log.type
 
 
 /**

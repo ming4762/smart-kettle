@@ -1,5 +1,7 @@
 package com.smart.starter.kettle.log
 
+import com.smart.starter.kettle.log.type.LogType
+
 
 /**
  * 自定义配置holder

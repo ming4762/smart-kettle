@@ -1,5 +1,6 @@
 package com.smart.starter.kettle.log
 
+import com.smart.starter.kettle.log.type.TransLogType
 import com.smart.starter.kettle.properties.LogDatabaseProperties
 import org.pentaho.di.core.database.DatabaseMeta
 import org.pentaho.di.core.logging.BaseLogTable

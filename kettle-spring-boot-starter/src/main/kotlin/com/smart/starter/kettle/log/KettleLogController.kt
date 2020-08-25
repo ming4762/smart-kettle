@@ -16,7 +16,47 @@ import org.springframework.util.Assert
  */
 class KettleLogController(private val logDatabaseProperties: LogDatabaseProperties) {
 
+    companion object {
+        /**
+         * 开启trans日志
+         */
+        @JvmStatic
+        fun enableTransLog(enable: Boolean, tableName: String? = null) {
+            this.enableLog(TransLogType.TRANS_LOG, enable, tableName)
+        }
 
+        @JvmStatic
+        fun enableStepLog(enable: Boolean, tableName: String? = null) {
+            this.enableLog(TransLogType.STEP_LOG, enable, tableName)
+        }
+
+        @JvmStatic
+        fun enableMetricsLog(enable: Boolean, tableName: String? = null) {
+            this.enableLog(TransLogType.METRICS_LOG, enable, tableName)
+        }
+
+        @JvmStatic
+        fun enablePerformanceLog(enable: Boolean, tableName: String? = null) {
+            this.enableLog(TransLogType.PERFORMANCE_LOG, enable, tableName)
+        }
+
+        @JvmStatic
+        fun enableTransChannelLog(enable: Boolean, tableName: String? = null) {
+            this.enableLog(TransLogType.TRANS_CHANNEL_LOG, enable, tableName)
+        }
+
+        /**
+         * 启用日志
+         * @param logType 日志类型
+         * @param tableName 日志表名称（可以指定日志表，也可以使用全局配置的日志表）
+         */
+        @JvmStatic
+        private fun enableLog(logType: TransLogType, enable: Boolean, tableName: String? = null) {
+            val config = CustomLogConfigHolder.getConfig(logType)
+            config.enable = enable
+            config.tableName = tableName
+        }
+    }
 
     /**
      * 是否启用日志
@@ -25,39 +65,7 @@ class KettleLogController(private val logDatabaseProperties: LogDatabaseProperti
         return this.logDatabaseProperties.enable
     }
 
-    /**
-     * 开启trans日志
-     */
-    fun enableTransLog(tableName: String?) {
-        this.enableLog(TransLogType.TRANS_LOG, tableName)
-    }
 
-    fun enableStepLog(tableName: String?) {
-        this.enableLog(TransLogType.STEP_LOG, tableName)
-    }
-
-    fun enableMetricsLog(tableName: String?) {
-        this.enableLog(TransLogType.METRICS_LOG, tableName)
-    }
-
-    fun enablePerformanceLog(tableName: String?) {
-        this.enableLog(TransLogType.PERFORMANCE_LOG, tableName)
-    }
-
-    fun enableChannelLog(tableName: String?) {
-        this.enableLog(TransLogType.TRANS_CHANNEL_LOG, tableName)
-    }
-
-    /**
-     * 启用日志
-     * @param logType 日志类型
-     * @param tableName 日志表名称（可以指定日志表，也可以使用全局配置的日志表）
-     */
-    private fun enableLog(logType: TransLogType, tableName: String?) {
-        val config = CustomLogConfigHolder.getConfig(logType)
-        config.enable = true
-        config.tableName = tableName
-    }
 
 
     /**

@@ -50,9 +50,7 @@ object KettleActuator {
      */
     @JvmStatic
     fun getTransMeta(ktrPath: String): TransMeta {
-        // 初始化kettle环境
-        KettleEnvironment.init()
-        EnvUtil.environmentInit()
+        this.initKettle()
         return TransMeta(ktrPath)
     }
 
@@ -64,6 +62,7 @@ object KettleActuator {
      */
     @JvmStatic
     fun getDbTransMeta(repository: KettleDatabaseRepository, transName: String, directoryName: String?): TransMeta {
+        this.initKettle()
         val directoryInterface: RepositoryDirectoryInterface = getDirectoryInterface(repository, directoryName)
         // 获取转换
         return repository.loadTransformation(transName, directoryInterface, null, true, null)
@@ -79,6 +78,7 @@ object KettleActuator {
      * @throws KettleException 转换异常
      */
     @JvmStatic
+    @JvmOverloads
     @Throws(KettleException :: class)
     fun executeTransfer(
             transMeta: TransMeta,
@@ -113,6 +113,7 @@ object KettleActuator {
      */
     @JvmStatic
     fun getDbJobMate(repository: KettleDatabaseRepository, jobName: String, directoryName: String?): JobMeta {
+        this.initKettle()
         val directoryInterface = getDirectoryInterface(repository, directoryName)
         return repository.loadJob(jobName, directoryInterface, null, null)
     }
@@ -126,6 +127,7 @@ object KettleActuator {
      * @throws KettleException Exception
      */
     @JvmStatic
+    @JvmOverloads
     @Throws(KettleException :: class)
     fun executeJob(repository: KettleDatabaseRepository, jobMeta: JobMeta, params: Map<String, String> = mapOf(), parameterMap: Map<String, String> = mapOf(), logLevel: LogLevel = LogLevel.BASIC): Job {
         val job = Job(repository, jobMeta)
@@ -157,6 +159,17 @@ object KettleActuator {
             directoryInterface = directoryInterface.findDirectory(directoryName)
         }
         return directoryInterface
+    }
+
+    /**
+     * 初始化kettle环境
+     */
+    private fun initKettle() {
+        if (!KettleEnvironment.isInitialized()) {
+            // 初始化kettle环境
+            KettleEnvironment.init()
+            EnvUtil.environmentInit()
+        }
     }
 }
 

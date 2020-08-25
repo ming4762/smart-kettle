@@ -64,7 +64,7 @@ class KettleLogController(private val logDatabaseProperties: LogDatabaseProperti
 
         @JvmStatic
         @JvmOverloads
-        fun enableJobEnrtyLog(enable: Boolean, tableName: String? = null) {
+        fun enableJobEntryLog(enable: Boolean, tableName: String? = null) {
             this.enableLog(JobLogType.JOB_ENTRY_LOG, enable, tableName)
         }
 

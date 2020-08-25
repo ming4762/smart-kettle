@@ -5,8 +5,6 @@ import org.pentaho.di.core.database.DatabaseMeta
 import org.pentaho.di.core.logging.BaseLogTable
 import org.pentaho.di.job.JobMeta
 import org.pentaho.di.trans.TransMeta
-import org.springframework.beans.BeanUtils
-import org.springframework.stereotype.Component
 import org.springframework.util.Assert
 
 
@@ -16,7 +14,6 @@ import org.springframework.util.Assert
  * 2020/8/24 9:54
  * @since 1.0
  */
-@Component
 class KettleLogController(private val logDatabaseProperties: LogDatabaseProperties) {
 
 
@@ -77,7 +74,7 @@ class KettleLogController(private val logDatabaseProperties: LogDatabaseProperti
                 val customConfig = CustomLogConfigHolder.getConfig(it)
                 val logTable = it.function.invoke(transMeta) as BaseLogTable
                 logTable.connectionName = databaseMeta.name
-                logTable.tableName = customConfig.tableName?:this.logDatabaseProperties.transLogTableName
+                logTable.tableName = customConfig.tableName?:this.getGlobalTransLogTableName(it)
                 it.setFunction.invoke(transMeta, logTable)
             }
         }
@@ -98,12 +95,25 @@ class KettleLogController(private val logDatabaseProperties: LogDatabaseProperti
         // 获取配置信息
         val customConfig = CustomLogConfigHolder.getConfig(logType)
         if (customConfig.enable == true) {
-            Assert.notNull(customConfig.tableName?:this.logDatabaseProperties.transLogTableName, "必须指定日志表，日志表类型：${logType.name}")
+            Assert.notNull(customConfig.tableName?:this.getGlobalTransLogTableName(logType), "必须指定日志表，日志表类型：${logType.name}")
             return true
-        } else if (customConfig.enable == null && this.isEnable() && this.logDatabaseProperties.transLogTableName != null) {
+        } else if (customConfig.enable == null && this.isEnable() && this.getGlobalTransLogTableName(logType) != null) {
             return true
         }
         return false
+    }
+
+    /**
+     * 获取全局的日志表名称
+     */
+    private fun getGlobalTransLogTableName(logType: TransLogType): String? {
+        return when (logType) {
+            TransLogType.TRANS_LOG -> this.logDatabaseProperties.transLogTableName
+            TransLogType.STEP_LOG -> this.logDatabaseProperties.stepLogTableName
+            TransLogType.METRICS_LOG -> this.logDatabaseProperties.metricsLogTableName
+            TransLogType.PERFORMANCE_LOG -> this.logDatabaseProperties.performanceLogTableName
+            TransLogType.TRANS_CHANNEL_LOG -> this.logDatabaseProperties.channelLogTableTable
+        }
     }
 
 
@@ -113,7 +123,13 @@ class KettleLogController(private val logDatabaseProperties: LogDatabaseProperti
      */
     private fun createLogDbMeta(): DatabaseMeta {
         val databaseMeta = DatabaseMeta()
-        BeanUtils.copyProperties(this.logDatabaseProperties, databaseMeta)
+        databaseMeta.name = this.logDatabaseProperties.name?:LogDatabaseProperties.DEFAULT_DB_NAME
+        databaseMeta.setDatabaseType(this.logDatabaseProperties.type)
+        databaseMeta.hostname = this.logDatabaseProperties.host
+        databaseMeta.setDBPort(this.logDatabaseProperties.port)
+        databaseMeta.setDBName(this.logDatabaseProperties.db)
+        databaseMeta.username = this.logDatabaseProperties.dbUser
+        databaseMeta.password = this.logDatabaseProperties.dbPassword
         return databaseMeta
     }
 }

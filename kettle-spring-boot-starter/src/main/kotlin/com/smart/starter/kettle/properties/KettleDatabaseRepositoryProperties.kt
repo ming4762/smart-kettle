@@ -11,6 +11,6 @@ import com.smart.kettle.core.properties.DatabaseMetaProperties
  */
 class KettleDatabaseRepositoryProperties : DatabaseMetaProperties() {
 
-    val resUser = "admin"
-    val resPassword = "admin"
+    var resUser = "admin"
+    var resPassword = "admin"
 }

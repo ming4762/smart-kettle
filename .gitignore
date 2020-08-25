@@ -38,3 +38,4 @@ logs/
 .vscode/
 
 gc-tests/
+smart-kettle-test/

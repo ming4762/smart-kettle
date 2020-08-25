@@ -11,44 +11,35 @@ import org.springframework.util.Assert
  * 2020/8/24 10:32
  * @since 1.0
  */
-class LogDatabaseProperties(var enable: Boolean = true) : DatabaseMetaProperties(), InitializingBean {
+class LogDatabaseProperties(var enable: Boolean = true) : DatabaseMetaProperties() {
 
     companion object {
-        private const val DEFAULT_DB_NAME = "LOG_DB"
+        const val DEFAULT_DB_NAME = "LOG_DB"
     }
 
     /**
      * 转换日志表名称
      */
-    val transLogTableName: String? = null
+    var transLogTableName: String? = null
 
     /**
      * 步骤日志表名称
      */
-    val stepLogTableName: String? = null
+    var stepLogTableName: String? = null
 
     /**
      * metrics 日志表名称
      */
-    val metricsLogTableName: String? = null
+    var metricsLogTableName: String? = null
 
     /**
      * performance日志表名称
      */
-    val performanceLogTableName: String? = null
+    var performanceLogTableName: String? = null
 
     /**
      * 通道日志表名称
      */
-    val channelLogTableTable: String? = null
+    var channelLogTableTable: String? = null
 
-    /**
-     * 验证参数是否正确
-     */
-    override fun afterPropertiesSet() {
-        if (this.enable) {
-            this.name = this.name?: DEFAULT_DB_NAME
-            Assert.notNull(this.db, "必须指定日志数据库")
-        }
-    }
 }

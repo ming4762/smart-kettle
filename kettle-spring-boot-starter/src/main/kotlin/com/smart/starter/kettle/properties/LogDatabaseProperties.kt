@@ -40,6 +40,16 @@ class LogDatabaseProperties(var enable: Boolean = true) : DatabaseMetaProperties
     /**
      * 通道日志表名称
      */
-    var channelLogTableTable: String? = null
+    var channelLogTableName: String? = null
+
+    /**
+     * job日志
+     */
+    var jobLogTableName: String? = null
+
+    /**
+     * job entry日志
+     */
+    var jobEntryLogTableName: String? = null
 
 }

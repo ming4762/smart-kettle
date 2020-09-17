@@ -52,11 +52,6 @@ interface KettleService {
      * @throws KettleException 转换异常
      */
     @Throws(IOException::class, KettleException::class)
-    fun executeClasspathFileTransfer(ktrPath: String, params: Array<String> = arrayOf(), variableMap: Map<String, String> = mapOf(), parameter: Map<String, String> = mapOf(), logLevel: LogLevel = LogLevel.BASIC): Trans {
-        val base = Thread.currentThread().contextClassLoader.getResource("")
-        Assert.notNull(base, "获取classpath路径发生错误")
-        // 获取文件路径
-        val path = File(base!!.file, ktrPath).canonicalPath
-        return executeFileTransfer(path, params, variableMap, parameter, logLevel)
-    }
+    fun executeClasspathFileTransfer(ktrPath: String, params: Array<String> = arrayOf(), variableMap: Map<String, String> = mapOf(), parameter: Map<String, String> = mapOf(), logLevel: LogLevel = LogLevel.BASIC): Trans
+
 }

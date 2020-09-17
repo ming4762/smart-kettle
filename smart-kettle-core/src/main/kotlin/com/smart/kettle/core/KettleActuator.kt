@@ -11,6 +11,8 @@ import org.pentaho.di.repository.RepositoryDirectoryInterface
 import org.pentaho.di.repository.kdr.KettleDatabaseRepository
 import org.pentaho.di.trans.Trans
 import org.pentaho.di.trans.TransMeta
+import java.io.FileInputStream
+import java.io.InputStream
 import kotlin.jvm.Throws
 
 
@@ -52,6 +54,15 @@ object KettleActuator {
     fun getTransMeta(ktrPath: String): TransMeta {
         this.initKettle()
         return TransMeta(ktrPath)
+    }
+
+    /**
+     * 获取TransMeta
+     * @param inputStream 转换流
+     */
+    fun getTransMeta(inputStream: InputStream): TransMeta {
+        this.initKettle()
+        return TransMeta(inputStream, null, true, null, null)
     }
 
     /**
@@ -99,9 +110,7 @@ object KettleActuator {
         trans.execute(params)
         // 等待转换完成
         trans.waitUntilFinished()
-        if (trans.errors > 0) {
-            throw KettleException("There are errors during transformation exception!(传输过程中发生异常)")
-        }
+
         return trans
     }
 
@@ -137,9 +146,7 @@ object KettleActuator {
         }
         job.start()
         job.waitUntilFinished()
-        if (job.errors > 0) {
-            throw KettleException("There are errors during job exception!(执行job发生异常)")
-        }
+
         return job
     }
 

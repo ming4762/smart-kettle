@@ -76,6 +76,21 @@ class KettleServiceImpl(private val kettleRepositoryProvider: KettleRepositoryPr
     }
 
     /**
+     * 执行转换
+     * 文件位于classpath
+     * @param ktrPath 转换路径
+     * @throws KettleException 转换异常
+     */
+    override fun executeClasspathFileTransfer(ktrPath: String, params: Array<String>, variableMap: Map<String, String>, parameter: Map<String, String>, logLevel: LogLevel): Trans {
+        val inputStream = this.javaClass.classLoader.getResourceAsStream(ktrPath)
+        Assert.notNull(inputStream, "execute trans fail,can not find trans file")
+        val transMeta = KettleActuator.getTransMeta(inputStream!!)
+        // 初始化日志
+        this.kettleLogController.initTransLog(transMeta)
+        return KettleActuator.executeTransfer(transMeta, params, variableMap, parameter, logLevel)
+    }
+
+    /**
      * 获取资源库信息
      */
     private fun getRepository(): KettleDatabaseRepository {

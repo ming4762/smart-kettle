@@ -131,7 +131,7 @@ object KettleActuator {
         val directoryInterface = getDirectoryInterface(repository, directoryName)
         return repository.loadJob(jobName, directoryInterface, null, null)
     }
-
+    
     /**
      * 执行job
      * @param repository 资源库

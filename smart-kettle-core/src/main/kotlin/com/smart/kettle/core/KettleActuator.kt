@@ -13,6 +13,7 @@ import org.pentaho.di.trans.Trans
 import org.pentaho.di.trans.TransMeta
 import java.io.FileInputStream
 import java.io.InputStream
+import java.util.function.Consumer
 import kotlin.jvm.Throws
 
 
@@ -86,6 +87,7 @@ object KettleActuator {
      * @param variableMap 变量
      * @param parameter 命名参数
      * @param logLevel 日志级别
+     * @param beforeHandler 执行前回调
      * @throws KettleException 转换异常
      */
     @JvmStatic
@@ -96,7 +98,8 @@ object KettleActuator {
             params: Array<String> = arrayOf(),
             variableMap: Map<String, String> = mapOf(),
             parameter: Map<String, String> = mapOf(),
-            logLevel: LogLevel = LogLevel.BASIC
+            logLevel: LogLevel = LogLevel.BASIC,
+            beforeHandler: Consumer<Trans>? = null
     ): Trans {
         val trans = Trans(transMeta)
         // 设置变量
@@ -106,6 +109,8 @@ object KettleActuator {
             trans.setParameterValue(key, value)
         }
         trans.logLevel = logLevel
+        // 执行前回调
+        beforeHandler?.accept(trans)
         // 执行转换
         trans.execute(params)
         // 等待转换完成
@@ -133,17 +138,27 @@ object KettleActuator {
      * @param jobMeta job元数据
      * @param params job参数
      * @param parameterMap 命名参数
+     * @param beforeHandler 执行前回调
      * @throws KettleException Exception
      */
     @JvmStatic
     @JvmOverloads
     @Throws(KettleException :: class)
-    fun executeJob(repository: KettleDatabaseRepository, jobMeta: JobMeta, params: Map<String, String> = mapOf(), parameterMap: Map<String, String> = mapOf(), logLevel: LogLevel = LogLevel.BASIC): Job {
+    fun executeJob(
+            repository: KettleDatabaseRepository,
+            jobMeta: JobMeta,
+            params: Map<String, String> = mapOf(),
+            parameterMap: Map<String, String> = mapOf(),
+            logLevel: LogLevel = LogLevel.BASIC,
+            beforeHandler: Consumer<Job>? = null
+    ): Job {
         val job = Job(repository, jobMeta)
         params.forEach { (variableName: String?, variableValue: String?) -> job.setVariable(variableName, variableValue) }
         for ((key, value) in parameterMap) {
             job.setParameterValue(key, value)
         }
+        // 执行前回调
+        beforeHandler?.accept(job)
         job.start()
         job.waitUntilFinished()
 

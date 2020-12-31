@@ -107,6 +107,26 @@ class KettleServiceImpl(private val kettleRepositoryProvider: KettleRepositoryPr
         return KettleActuator.executeTransfer(transMeta, params, variableMap, parameter, logLevel, beforeHandler)
     }
 
+    override fun executeFileJob(path: String, params: Map<String, String>, parameterMap: Map<String, String>, logLevel: LogLevel, beforeHandler: Consumer<Job>?): Job {
+        val jobMeta = KettleActuator.getJobMate(path)
+        return KettleActuator.executeJob(null, jobMeta, params, parameterMap, logLevel, beforeHandler)
+    }
+
+    override fun executeFileJob(path: String, params: Map<String, String>, parameterMap: Map<String, String>, logLevel: LogLevel): Job {
+        return this.executeFileJob(path, params, parameterMap, logLevel, null)
+    }
+
+    override fun executeClasspathJob(path: String, params: Map<String, String>, parameterMap: Map<String, String>, logLevel: LogLevel, beforeHandler: Consumer<Job>?): Job {
+        val inputStream = this.javaClass.classLoader.getResourceAsStream(path)
+        Assert.notNull(inputStream, "execute trans fail,can not find job file")
+        val jobMeta = KettleActuator.getJobMate(inputStream!!)
+        return KettleActuator.executeJob(null, jobMeta, params, parameterMap, logLevel, beforeHandler)
+    }
+
+    override fun executeClasspathJob(path: String, params: Map<String, String>, parameterMap: Map<String, String>, logLevel: LogLevel): Job {
+        return this.executeClasspathJob(path, params, parameterMap, logLevel, null)
+    }
+
     /**
      * 获取资源库信息
      */

@@ -86,6 +86,48 @@ interface KettleService {
             beforeHandler: Consumer<Job>?
     ): Job
 
+    /**
+     * 执行文件JOB
+     */
+    fun executeFileJob(
+            path: String,
+            params: Map<String, String> = mapOf(),
+            parameterMap: Map<String, String> = mapOf(),
+            logLevel: LogLevel = LogLevel.BASIC,
+            beforeHandler: Consumer<Job>?
+    ): Job
+
+    /**
+     * 执行文件JOB
+     */
+    fun executeFileJob(
+            path: String,
+            params: Map<String, String> = mapOf(),
+            parameterMap: Map<String, String> = mapOf(),
+            logLevel: LogLevel = LogLevel.BASIC
+    ): Job
+
+    /**
+     * 执行Classpath JOB
+     */
+    fun executeClasspathJob(
+            path: String,
+            params: Map<String, String> = mapOf(),
+            parameterMap: Map<String, String> = mapOf(),
+            logLevel: LogLevel = LogLevel.BASIC,
+            beforeHandler: Consumer<Job>?
+    ): Job
+
+    /**
+     * 执行Classpath JOB
+     */
+    fun executeClasspathJob(
+            path: String,
+            params: Map<String, String> = mapOf(),
+            parameterMap: Map<String, String> = mapOf(),
+            logLevel: LogLevel = LogLevel.BASIC
+    ): Job
+
 
     /**
      * 执行转换

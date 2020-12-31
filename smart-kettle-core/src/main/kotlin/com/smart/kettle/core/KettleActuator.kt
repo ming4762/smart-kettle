@@ -131,7 +131,27 @@ object KettleActuator {
         val directoryInterface = getDirectoryInterface(repository, directoryName)
         return repository.loadJob(jobName, directoryInterface, null, null)
     }
-    
+
+    /**
+     * 获取JobMate
+     * @param path job文件路径
+     */
+    @JvmStatic
+    fun getJobMate(path: String): JobMeta {
+        this.initKettle()
+        return JobMeta(path, null)
+    }
+
+    /**
+     * 通过InputStream获取JobMate
+     * @param 输入流
+     */
+    @JvmStatic
+    fun getJobMate(inputStream: InputStream): JobMeta {
+        this.initKettle()
+        return JobMeta(inputStream, null, null)
+    }
+
     /**
      * 执行job
      * @param repository 资源库
@@ -145,7 +165,7 @@ object KettleActuator {
     @JvmOverloads
     @Throws(KettleException :: class)
     fun executeJob(
-            repository: KettleDatabaseRepository,
+            repository: KettleDatabaseRepository? = null,
             jobMeta: JobMeta,
             params: Map<String, String> = mapOf(),
             parameterMap: Map<String, String> = mapOf(),
